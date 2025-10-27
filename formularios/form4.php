@@ -1,5 +1,5 @@
 
-<form method="POST" action="radio.php">
+<form method="POST" action="form4.php">
 
 <input type="radio" id="male" name="gender" value="MALE">
 <label for="male"> Male</label><br>

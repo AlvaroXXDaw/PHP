@@ -1,12 +1,5 @@
 <?php
 
-	
-	
-
-
-
-
-	
 function rango($value, $value2) {
 	$array = [];
     $contador = 0;
@@ -18,12 +11,6 @@ function rango($value, $value2) {
     return $array;
 }
 	
-	
-
-	
-
-	
-
 
 	if (isset($_POST["Enviar"])) {
     if (isset($_POST["numero"]) && isset($_POST["numero2"])) {

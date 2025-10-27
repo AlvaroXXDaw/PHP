@@ -8,94 +8,99 @@
 
 <body>
 <?php
-function checkPassword( $password )
+function checkPassword( $contrasena )
 {	
-	if( strlen( $password ) < 5 ) 
-		$resultado = 0;
+	if( strlen( $contrasena ) < 5 ) 
+		$esValido = 0;
 	else 
-		$resultado = 1;
-	return $resultado;
+		$esValido = 1;
+	return $esValido;
 }
 
-function checkUsuario( $usuario )
+function checkUsuario( $nombreUsuario )
 {	
-	if( strlen( $usuario ) < 5 ) 
-		$resultado = 0;
+	if( strlen( $nombreUsuario ) < 5 ) 
+		$esValido = 0;
 	else 
-		$resultado = 1;
-	return $resultado;
+		$esValido = 1;
+	return $esValido;
 }
 
-function checkCP( $cp )
+function checkCP( $codigoPostal )
 {	
-	if( (strlen( $cp ) < 5) || (!ctype_digit($cp)) ) 
-		$resultado = 0;
+	if( (strlen( $codigoPostal ) < 5) || (!ctype_digit($codigoPostal)) ) 
+		$esValido = 0;
 	else 
-		$resultado = 1;
-	return $resultado;
+		$esValido = 1;
+	return $esValido;
 }
 
-function checkPhoneNumber( $phoneNumber )
+function checkPhoneNumber( $numeroTelefono )
 {	
-	if( (strlen($phoneNumber)<9) || (!ctype_digit($phoneNumber)) )
-		$resultado = 0;
+	if( (strlen($numeroTelefono)<9) || (!ctype_digit($numeroTelefono)) )
+		$esValido = 0;
 	else 
-		$resultado = 1;
-	return $resultado;
+		$esValido = 1;
+	return $esValido;
 }
 
-function validateField( $fieldName, $missingFields ) 
+function validateField( $nombreCampo, $camposFaltantes ) 
 {
-	if ( in_array( $fieldName, $missingFields ) ) 
+	if ( in_array( $nombreCampo, $camposFaltantes ) ) 
 	{
 		echo ' class="error"';
 	}
 }
 
-function setValue( $fieldName ) 
+function setValue( $nombreCampo ) 
 {
-	if ( isset( $_POST[$fieldName] ) ) 
+	if ( isset( $_POST[$nombreCampo] ) ) 
 	{
-		echo $_POST[$fieldName];
+		echo $_POST[$nombreCampo];
 	}
 }
 
-function processForm( $campos ) 
+function processForm( $camposFormulario ) 
 {
-	foreach ( $campos as $campo ) 
+	foreach ( $camposFormulario as $campoActual ) 
 	{
-		if ( !isset( $_POST[$campo[ 'nombre' ] ] ) or !$_POST[$campo[ 'nombre' ] ] ) 
+		if ( !isset( $_POST[$campoActual[ 'nombre' ] ] ) or !$_POST[$campoActual[ 'nombre' ] ] ) 
 		{
-			$missingFields[] = $campo[ 'nombre' ];
+			$camposFaltantes[] = $campoActual[ 'nombre' ];
 		}
-		elseif( ! call_user_func( $campo[ 'funcion' ],  $_POST[$campo[ 'nombre' ] ] ) )
+		elseif( ! call_user_func( $campoActual[ 'funcion' ],  $_POST[$campoActual[ 'nombre' ] ] ) )
 		{
-			$missingFields[] = $campo[ 'nombre' ];
+			$camposFaltantes[] = $campoActual[ 'nombre' ];
 		}
 	}
-	if( isset ( $missingFields ) )
-		return( $missingFields );
+	if( isset ( $camposFaltantes ) )
+		return( $camposFaltantes );
 	else
 		return null;
 }
 
-function displayEntrada( $missingFields )
+function displayEntrada( $camposFaltantes )
 {
 	?>
 	<H1>Introduce Identificación</H1>
 	<FORM METHOD=POST ACTION="validacion.php">
 		<INPUT TYPE="hidden" name="opcion" value ="entrada">
 	<br>
-	<label for="usuario" <?php validateField( "usuario",	$missingFields ) ?>>Usuario</label>
+	<label for="usuario" 
+	
+	<?php validateField( "usuario",	$camposFaltantes ) ?>>Usuario</label>
 		<INPUT TYPE="text" NAME="usuario">
 	<br>
-	<label for="password" <?php validateField( "password",	$missingFields ) ?>>Password</label>
+	<label for="password" 
+	
+	<?php 
+	validateField( "password",	$camposFaltantes ) ?>>Password</label>
 		<INPUT TYPE="password" NAME="password">
 	<br>
-	<label for="phoneNumber" <?php validateField( "phoneNumber",	$missingFields ) ?>>Phone Number</label>
+	<label for="phoneNumber" <?php validateField( "phoneNumber",	$camposFaltantes ) ?>>Phone Number</label>
 		<INPUT TYPE="tel" NAME="phoneNumber" pattern="[69][0-9]{8}">
 	<br>
-	<label for="cp" <?php validateField( "cp",	$missingFields ) ?>>Zip Code</label>
+	<label for="cp" <?php validateField( "cp",	$camposFaltantes ) ?>>Zip Code</label>
 		<INPUT TYPE="text" NAME="cp" pattern="[0-9]{5}"> 
 	<br>
 	<input type="submit" name="submit" id="submitButton" value="Enviar" >
@@ -111,16 +116,16 @@ if( ! isset( $_POST["submit"] ) )
 elseif( isset( $_POST["opcion"]  ) &&  $_POST["opcion"] == "entrada" ) 
 {
 	// campo_requerido funcion_validacion
-	$campos = array( 
+	$camposFormulario = array( 
 				array( 'nombre' => 'usuario'    , 'funcion' => 'checkUsuario' ), 
 				array( 'nombre' => 'password'   , 'funcion' => 'checkPassword' ),
 				array( 'nombre' => 'cp'    , 'funcion' => 'checkCP' ),
 				array( 'nombre' => 'phoneNumber', 'funcion' => 'checkPhoneNumber' ) );
-	$missingFields = processForm( $campos );
+	$camposFaltantes = processForm( $camposFormulario );
 
-	if ( $missingFields ) 
+	if ( $camposFaltantes ) 
 	{
-		displayEntrada( $missingFields );
+		displayEntrada( $camposFaltantes );
 	} 
 	else
 	{

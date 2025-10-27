@@ -15,6 +15,7 @@ function formulario2($nombre)
 	?>
 	<form method="post" action="hidden2.php">
 	<input type="hidden" name="opcion" value="paso3" >
+	
 	<?php 
 	printf('<input type="hidden" name="nombre" value="%s">) ', $nombre);
 	?>
@@ -36,7 +37,7 @@ function formulario3($nombre,$apellido)
 <form method="POST" action="hidden2.php">
 <input type="hidden" name="opcion" value="paso4">
 
-<label for="male"> Male</label><br>
+<label for="male"></label><br>
 <?php 
 	printf('<input type="hidden" name="nombre" value="%s"> ) ', $nombre);
 	printf('<input type="hidden" name="apellidos" value="%s"> ) ', $apellido);
@@ -72,30 +73,31 @@ function formulario3($nombre,$apellido)
  <body>
 <?php
 
-if( ! isset( $_POST[ "opcion" ] )  )
+if( !isset( $_POST[ "opcion" ] )  )
 {
 	formulario1();
 }
-else if( $_POST[ "opcion" ] == "paso2")
+else 
+	if( $_POST[ "opcion" ] == "paso2")
 {
-	if(  isset( $_POST[ "nombre" ] )  )
+	if(  !empty( $_POST[ "nombre" ] )  )
 		formulario2($_POST[ "nombre" ]);
 	else
 		formulario1();
 }
 else if( $_POST[ "opcion" ] == "paso3")
 {
-	if(  isset( $_POST[ "nombre" ] ) && isset( $_POST[ "apellidos" ] ) )
+	if(  !empty( $_POST[ "nombre" ] ) && !empty( $_POST[ "apellidos" ] ) )
 		formulario3( $_POST[ "nombre" ],$_POST[ "apellidos" ]);
 	else
-		formulario1();
+		formulario2($_POST[ "nombre" ]);
 }
 else if( $_POST[ "opcion" ] == "paso4")
 {
-	if(  isset( $_POST[ "nombre" ] ) && isset( $_POST[ "apellidos" ] ) && isset($_POST["sexo"]))
+	if(  !empty( $_POST[ "nombre" ] ) && !empty( $_POST[ "apellidos" ] ) && !empty($_POST["sexo"]))
 		respuesta( $_POST[ "nombre" ],$_POST[ "apellidos" ], $_POST["sexo"]);
 	else
-		formulario1();
+		formulario3($_POST[ "nombre" ],$_POST[ "apellidos" ]);
 }
 
 ?>
